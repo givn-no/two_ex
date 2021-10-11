@@ -24,7 +24,6 @@ defmodule Tillit.MixProject do
   defp deps do
     [
       {:tesla, "~> 1.4.3"},
-      {:inflex, "~> 2.1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:jason, "~> 1.2"}
     ]
