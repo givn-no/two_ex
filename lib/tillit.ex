@@ -102,7 +102,7 @@ defmodule Tillit do
   """
   @spec get_order(Tesla.Env.client(), String.t()) :: {:ok, Types.order()} | {:error, Tesla.Env.t()}
   def get_order(client, order_id) do
-    Tesla.get(client, "/orders/:id", opts: [path_params: [id: order_id]])
+    Tesla.get(client, "/order/:id", opts: [path_params: [id: order_id]])
     |> evaluate_response()
   end
 
