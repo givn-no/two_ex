@@ -36,14 +36,14 @@ defmodule Tillit do
             {"x-api-key", api_key}
           ]
         },
-        Tesla.Middleware.JSON,
-        Tesla.Middleware.Logger
+        Tesla.Middleware.JSON
       ] ++
         additional_middleware ++
         [
-          # Always run PathParams as last middleware in order to
-          # support metrics, logging, etc. on the parameterized URL
-          Tesla.Middleware.PathParams
+          # Run PathParams after additional_middleware in order to
+          # support e.g. metrics, etc. on the parameterized URL
+          Tesla.Middleware.PathParams,
+          Tesla.Middleware.Logger
         ]
 
     Tesla.client(middleware, adapter)
