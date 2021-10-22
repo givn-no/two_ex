@@ -138,7 +138,7 @@ defmodule Tillit do
   """
   @spec cancel_order(Tesla.Env.client(), String.t()) :: {:ok, :order_cancelled} | {:error, Tesla.Env.t()}
   def cancel_order(client, order_id) do
-    Tesla.post(client, "/order/:id/cancel", opts: [path_params: [id: order_id]])
+    Tesla.post(client, "/order/:id/cancel", nil, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_cancelled}
@@ -151,7 +151,7 @@ defmodule Tillit do
   """
   @spec set_delivered(Tesla.Env.client(), String.t()) :: {:ok, :order_delivered} | {:error, Tesla.Env.t()}
   def set_delivered(client, order_id) do
-    Tesla.post(client, "/order/:id/delivered", opts: [path_params: [id: order_id]])
+    Tesla.post(client, "/order/:id/delivered", nil, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_delivered}
@@ -164,7 +164,7 @@ defmodule Tillit do
   """
   @spec set_fulfilled(Tesla.Env.client(), String.t()) :: {:ok, :order_fulfilled} | {:error, Tesla.Env.t()}
   def set_fulfilled(client, order_id) do
-    Tesla.post(client, "/order/:id/fulfilled", opts: [path_params: [id: order_id]])
+    Tesla.post(client, "/order/:id/fulfilled", nil, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_fulfilled}
