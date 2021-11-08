@@ -202,4 +202,14 @@ defmodule Tillit.Types do
           optional(:verification_method) => String.t(),
           optional(:verified_on) => String.t()
         }
+
+  @type company_address :: %{
+    city: String.t(),
+    postalCode: String.t(),
+    streetAddress: String.t()
+  }
+
+  @type company_address_response :: %{
+    address: company_address()
+  }
 end

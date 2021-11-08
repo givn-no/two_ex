@@ -13,7 +13,7 @@ defmodule Tillit do
   defp base_url(:test), do: @test_base_url
   defp base_url(:production), do: @production_base_url
 
-  @type adapter_option :: {:adapter, Tesla.Client.adapter() | nil}
+  @type adapter_option :: {:adapter, {Tesla.Client.adapter(), []}, Tesla.Client.adapter() | nil}
   @type middleware_option :: {:middleware, [Tesla.Client.middleware()] | nil}
   @type tillit_option :: adapter_option() | middleware_option()
   @type tillit_options :: [tillit_option()]
@@ -74,8 +74,16 @@ defmodule Tillit do
     {:ok, nil}
   end
 
-  defp evaluate_response({:ok, %Tesla.Env{status: status}}) do
-    {:error, "unhandled http status #{status}"}
+  defp evaluate_response({:ok, %Tesla.Env{status: status, body: body}}) when status in 400..499 do
+    {:error, {:http_error, status, body}}
+  end
+
+  defp evaluate_response({:ok, %Tesla.Env{status: status}}) when status in 400..499 do
+    {:error, {:http_error, status, nil}}
+  end
+
+  defp evaluate_response({:ok, %Tesla.Env{status: status} = env}) do
+    {:error, {:unhandled_status, status, env}}
   end
 
   @doc """
@@ -134,6 +142,15 @@ defmodule Tillit do
   end
 
   @doc """
+  Refund an order.
+  """
+  # @spec refund_order(Tesla.Env.client(), String.t(), Types.refund_req()) :: {:ok, Types.order()} | {:error, Tesla.Env.t()}
+  def refund_order(client, order_id, refund) do
+    Tesla.post(client, "/order/:id/refund", refund, opts: [path_params: [id: order_id]])
+    |> evaluate_response()
+  end
+
+  @doc """
   Cancel an order and void the invoice.
   """
   @spec cancel_order(Tesla.Env.client(), String.t()) :: {:ok, :order_cancelled} | {:error, Tesla.Env.t()}
@@ -179,6 +196,12 @@ defmodule Tillit do
           {:ok, Types.order_verification()} | {:error, Tesla.Env.t()}
   def get_order_verification(client, order_id) do
     Tesla.get(client, "/orders/:id/verification", opts: [path_params: [id: order_id]])
+    |> evaluate_response()
+  end
+
+  @spec get_company_address(Tesla.Env.client(), String.t()) :: {:ok, Types.company_address()} | {:error, Tesla.Env.t()}
+  def get_company_address(client, organization_id) do
+    Tesla.get(client, "/company/:organization_id/address", opts: [path_params: [organization_id: organization_id]])
     |> evaluate_response()
   end
 end
