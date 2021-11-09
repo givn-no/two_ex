@@ -1,4 +1,4 @@
-defmodule Tillit.Types do
+defmodule Two.Types do
   @type barcode :: %{
           optional(:value) => String.t(),
           :type => String.t()

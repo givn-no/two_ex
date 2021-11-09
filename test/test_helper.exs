@@ -2,7 +2,7 @@ ExUnit.start()
 
 defmodule TestHelpers do
   def create_client() do
-    Tillit.new(:test, "WITH_ARMS_WIDE_TOKAN")
+    Two.new(:test, "WITH_ARMS_WIDE_TOKAN")
   end
 
   def get_header_value(headers, key) do

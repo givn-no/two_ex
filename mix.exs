@@ -1,17 +1,17 @@
-defmodule Tillit.MixProject do
+defmodule Two.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :tillit_ex,
+      app: :two_ex,
       version: "0.0.1",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
       deps: deps(),
-      name: "Tillit",
-      source_url: "https://github.com/hooplab/tillit_ex"
+      name: "Two Client",
+      source_url: "https://github.com/hooplab/two_ex"
     ]
   end
 

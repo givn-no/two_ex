@@ -1,9 +1,9 @@
-defmodule Tillit do
+defmodule Two do
   @moduledoc """
   Root module for creating clients.
   """
 
-  alias Tillit.Types
+  alias Two.Types
 
   @default_adapter Tesla.Adapter.Httpc
 
@@ -15,13 +15,13 @@ defmodule Tillit do
 
   @type adapter_option :: {:adapter, {Tesla.Client.adapter(), []}, Tesla.Client.adapter() | nil}
   @type middleware_option :: {:middleware, [Tesla.Client.middleware()] | nil}
-  @type tillit_option :: adapter_option() | middleware_option()
-  @type tillit_options :: [tillit_option()]
+  @type two_option :: adapter_option() | middleware_option()
+  @type two_options :: [two_option()]
 
   @doc """
   Initializes a Tesla http client.
   """
-  @spec new(:test | :production, String.t(), tillit_options()) :: Tesla.Client.t()
+  @spec new(:test | :production, String.t(), two_options()) :: Tesla.Client.t()
   def new(env, api_key, opts \\ []) do
     adapter = opts[:adapter] || @default_adapter
     additional_middleware = opts[:middleware] || []
@@ -56,10 +56,10 @@ defmodule Tillit do
   """
   @spec new() :: Tesla.Client.t()
   def new() do
-    env = Application.fetch_env!(:tillit_ex, :env)
-    api_key = Application.fetch_env!(:tillit_ex, :api_key)
-    adapter = Application.fetch_env!(:tillit_ex, :adapter)
-    middleware = Application.fetch_env!(:tillit_ex, :middleware)
+    env = Application.fetch_env!(:two_ex, :env)
+    api_key = Application.fetch_env!(:two_ex, :api_key)
+    adapter = Application.fetch_env!(:two_ex, :adapter)
+    middleware = Application.fetch_env!(:two_ex, :middleware)
     new(env, api_key, adapter: adapter, middleware: middleware)
   end
 
