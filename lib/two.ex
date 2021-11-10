@@ -179,9 +179,15 @@ defmodule Two do
   @doc """
   Set order state `FULFILLED`.
   """
-  @spec set_fulfilled(Tesla.Env.client(), String.t()) :: {:ok, :order_fulfilled} | {:error, Tesla.Env.t()}
-  def set_fulfilled(client, order_id) do
-    Tesla.post(client, "/order/:id/fulfilled", nil, opts: [path_params: [id: order_id]])
+  @spec set_fulfilled(Tesla.Env.client(), String.t(), keyword()) :: {:ok, :order_fulfilled} | {:error, Tesla.Env.t()}
+  def set_fulfilled(client, order_id, opts \\ []) do
+    query =
+      case Enum.into(opts, %{}) do
+        %{lang: lang} -> [lang: lang]
+        _ -> []
+      end
+
+    Tesla.post(client, "/order/:id/fulfilled", nil, query: query, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_fulfilled}
