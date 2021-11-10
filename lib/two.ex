@@ -168,7 +168,7 @@ defmodule Two do
   """
   @spec set_delivered(Tesla.Env.client(), String.t()) :: {:ok, :order_delivered} | {:error, Tesla.Env.t()}
   def set_delivered(client, order_id) do
-    Tesla.post(client, "/order/:id/delivered", nil, opts: [path_params: [id: order_id]])
+    Tesla.post(client, "/order/:id/delivered", "", opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_delivered}
@@ -187,7 +187,7 @@ defmodule Two do
         _ -> []
       end
 
-    Tesla.post(client, "/order/:id/fulfilled", nil, query: query, opts: [path_params: [id: order_id]])
+    Tesla.post(client, "/order/:id/fulfilled", "", query: query, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_fulfilled}
