@@ -63,6 +63,12 @@ defmodule Two do
     new(env, api_key, adapter: adapter, middleware: middleware)
   end
 
+  @spec with_retry_middleware(Tesla.Client.t()) :: Tesla.Client.t()
+  defp with_retry_middleware(client) do
+    retry_middleware = {Tesla.Middleware.Retry, []}
+    Tesla.client([retry_middleware | Tesla.Client.middleware(client)], Tesla.Client.adapter(client))
+  end
+
   @spec evaluate_response({:ok, %Tesla.Env{}} | {:error, %Tesla.Env{}}) :: {:ok, map() | nil} | {:error, %Tesla.Env{}}
   defp evaluate_response({:error, _} = error), do: error
 
@@ -91,7 +97,9 @@ defmodule Two do
   """
   @spec create_order(Tesla.Env.client(), Types.new_order()) :: {:ok, Types.order()} | {:error, Tesla.Env.t()}
   def create_order(client, order) do
-    Tesla.post(client, "/order", order)
+    client
+    |> with_retry_middleware()
+    |> Tesla.post("/order", order)
     |> evaluate_response()
   end
 
@@ -101,7 +109,9 @@ defmodule Two do
   @spec create_order_intent(Tesla.Env.client(), Types.new_order_intent()) ::
           {:ok, Types.order_intent()} | {:error, Tesla.Env.t()}
   def create_order_intent(client, order) do
-    Tesla.post(client, "/order_intent", order)
+    client
+    |> with_retry_middleware()
+    |> Tesla.post("/order_intent", order)
     |> evaluate_response()
   end
 
@@ -110,7 +120,9 @@ defmodule Two do
   """
   @spec get_order(Tesla.Env.client(), String.t()) :: {:ok, Types.order()} | {:error, Tesla.Env.t()}
   def get_order(client, order_id) do
-    Tesla.get(client, "/order/:id", opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/order/:id", opts: [path_params: [id: order_id]])
     |> evaluate_response()
   end
 
@@ -119,7 +131,9 @@ defmodule Two do
   """
   @spec get_order_intent(Tesla.Env.client(), String.t()) :: {:ok, Types.order_intent()} | {:error, Tesla.Env.t()}
   def get_order_intent(client, order_id) do
-    Tesla.get(client, "/orders/:id", opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/orders/:id", opts: [path_params: [id: order_id]])
     |> evaluate_response()
   end
 
@@ -128,7 +142,9 @@ defmodule Two do
   """
   @spec get_orders(Tesla.Env.client()) :: {:ok, [Types.order()]} | {:error, Tesla.Env.t()}
   def get_orders(client) do
-    Tesla.get(client, "/orders")
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/orders")
     |> evaluate_response()
   end
 
@@ -137,7 +153,9 @@ defmodule Two do
   """
   @spec update_order(Tesla.Env.client(), String.t(), Types.order()) :: {:ok, Types.order()} | {:error, Tesla.Env.t()}
   def update_order(client, order_id, order) do
-    Tesla.put(client, "/order/:id", order, opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.put("/order/:id", order, opts: [path_params: [id: order_id]])
     |> evaluate_response()
   end
 
@@ -155,7 +173,9 @@ defmodule Two do
   """
   @spec cancel_order(Tesla.Env.client(), String.t()) :: {:ok, :order_cancelled} | {:error, Tesla.Env.t()}
   def cancel_order(client, order_id) do
-    Tesla.post(client, "/order/:id/cancel", nil, opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.post("/order/:id/cancel", nil, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_cancelled}
@@ -168,7 +188,9 @@ defmodule Two do
   """
   @spec set_delivered(Tesla.Env.client(), String.t()) :: {:ok, :order_delivered} | {:error, Tesla.Env.t()}
   def set_delivered(client, order_id) do
-    Tesla.post(client, "/order/:id/delivered", "", opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.post("/order/:id/delivered", "", opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_delivered}
@@ -187,7 +209,9 @@ defmodule Two do
         _ -> []
       end
 
-    Tesla.post(client, "/order/:id/fulfilled", "", query: query, opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.post("/order/:id/fulfilled", "", query: query, opts: [path_params: [id: order_id]])
     |> evaluate_response()
     |> case do
       {:ok, _} -> {:ok, :order_fulfilled}
@@ -201,13 +225,17 @@ defmodule Two do
   @spec get_order_verification(Tesla.Env.client(), String.t()) ::
           {:ok, Types.order_verification()} | {:error, Tesla.Env.t()}
   def get_order_verification(client, order_id) do
-    Tesla.get(client, "/orders/:id/verification", opts: [path_params: [id: order_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/orders/:id/verification", opts: [path_params: [id: order_id]])
     |> evaluate_response()
   end
 
   @spec get_company_address(Tesla.Env.client(), String.t()) :: {:ok, Types.company_address()} | {:error, Tesla.Env.t()}
   def get_company_address(client, organization_id) do
-    Tesla.get(client, "/company/:organization_id/address", opts: [path_params: [organization_id: organization_id]])
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/company/:organization_id/address", opts: [path_params: [organization_id: organization_id]])
     |> evaluate_response()
   end
 end
