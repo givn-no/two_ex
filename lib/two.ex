@@ -238,4 +238,15 @@ defmodule Two do
     |> Tesla.get("/company/:organization_id/address", opts: [path_params: [organization_id: organization_id]])
     |> evaluate_response()
   end
+
+  @spec get_company_address_by_country(Tesla.Env.client(), String.t(), String.t()) ::
+          {:ok, Types.company_address()} | {:error, Tesla.Env.t()}
+  def get_company_address_by_country(client, country_code, organization_id) do
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/:country_code/company/:organization_id/address",
+      opts: [path_params: [country_code: country_code, organization_id: organization_id]]
+    )
+    |> evaluate_response()
+  end
 end
