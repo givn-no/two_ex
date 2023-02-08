@@ -204,12 +204,41 @@ defmodule Two.Types do
         }
 
   @type company_address :: %{
-    city: String.t(),
-    postalCode: String.t(),
-    streetAddress: String.t()
-  }
+          city: String.t(),
+          postalCode: String.t(),
+          streetAddress: String.t()
+        }
 
   @type company_address_response :: %{
-    address: company_address()
-  }
+          address: company_address()
+        }
+
+  @type business_customer :: %{
+          :country_prefix => String.t(),
+          :email_domain => String.t(),
+          optional(:id) => String.t(),
+          optional(:insights_webhook) => String.t(),
+          :legal_name => String.t(),
+          :merchant_customer_id => String.t(),
+          :merchant_redirect_urls => merchant_redirect_urls(),
+          :missing_customer_data_url => String.t(),
+          optional(:official_address) => address(),
+          :organization_id => String.t(),
+          optional(:shipping_addresses) => [address()],
+          optional(:trade_name) => String.t(),
+          optional(:webhooks) => webhook_urls(),
+          optional(:website) => String.t(),
+          # server-populated fields
+          :approved_for_credit => boolean()
+        }
+
+  @type merchant_redirect_urls :: %{
+          :onboarding_completed_url => String.t(),
+          :onboarding_failed_url => String.t()
+        }
+
+  @type webhook_urls :: %{
+          optional(:onboarding_completed_url) => String.t(),
+          optional(:onboarding_failed_url) => String.t()
+        }
 end

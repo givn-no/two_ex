@@ -241,4 +241,16 @@ defmodule Two do
     )
     |> evaluate_response()
   end
+
+  @doc """
+  Create new business customer.
+  """
+  @spec create_new_business_customer(Tesla.Env.client(), String.t()) ::
+          {:ok, Types.business_customer()} | {:error, Tesla.Env.t()}
+  def create_new_business_customer(client, merchant_id) do
+    client
+    |> with_retry_middleware()
+    |> Tesla.post("/merchant/:mid/customer", opts: [path_params: [mid: merchant_id]])
+    |> evaluate_response()
+  end
 end
