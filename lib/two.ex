@@ -295,7 +295,7 @@ defmodule Two do
   def create_new_business_user(client, merchant_id, customer_id, user) do
     client
     |> with_retry_middleware()
-    |> Tesla.post("/merchant/:mid/customer/{cid}/user", user, opts: [path_params: [mid: merchant_id, cid: customer_id]])
+    |> Tesla.post("/merchant/:mid/customer/:cid/user", user, opts: [path_params: [mid: merchant_id, cid: customer_id]])
     |> evaluate_response()
   end
 
@@ -307,7 +307,7 @@ defmodule Two do
   def fetch_business_users(client, merchant_id, customer_id) do
     client
     |> with_retry_middleware()
-    |> Tesla.get("/merchant/:mid/customer/{cid}/user", opts: [path_params: [mid: merchant_id, cid: customer_id]])
+    |> Tesla.get("/merchant/:mid/customer/:cid/user", opts: [path_params: [mid: merchant_id, cid: customer_id]])
     |> evaluate_response()
   end
 end
