@@ -69,6 +69,12 @@ defmodule Two do
     Tesla.client([retry_middleware | Tesla.Client.middleware(client)], Tesla.Client.adapter(client))
   end
 
+  @spec with_follow_redirect_middleware(Tesla.Client.t()) :: Tesla.Client.t()
+  defp with_follow_redirect_middleware(client) do
+    redirect_middleware = {Tesla.Middleware.FollowRedirects, []}
+    Tesla.client([redirect_middleware | Tesla.Client.middleware(client)], Tesla.Client.adapter(client))
+  end
+
   @spec evaluate_response({:ok, %Tesla.Env{}} | {:error, %Tesla.Env{}}) :: {:ok, map() | nil} | {:error, %Tesla.Env{}}
   defp evaluate_response({:error, _} = error), do: error
 
@@ -274,6 +280,7 @@ defmodule Two do
   def lookup_business_customer(client, merchant_id, our_customer_id) do
     client
     |> with_retry_middleware()
+    |> with_follow_redirect_middleware()
     |> Tesla.get("/merchant/:mid/customer_lookup/:ext_cid",
       opts: [path_params: [mid: merchant_id, ext_cid: our_customer_id]]
     )
