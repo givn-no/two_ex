@@ -279,11 +279,11 @@ defmodule Two do
   end
 
   @doc """
-  Fetch all business users.
+  Fetch all users for a business.
   """
-  @spec create_new_business_user(Tesla.Env.client(), String.t(), String.t()) ::
+  @spec fetch_business_users(Tesla.Env.client(), String.t(), String.t()) ::
           {:ok, Types.business_users()} | {:error, Tesla.Env.t()}
-  def create_new_business_user(client, merchant_id, customer_id) do
+  def fetch_business_users(client, merchant_id, customer_id) do
     client
     |> with_retry_middleware()
     |> Tesla.get("/merchant/:mid/customer/{cid}/user", opts: [path_params: [mid: merchant_id, cid: customer_id]])
