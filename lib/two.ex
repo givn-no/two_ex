@@ -245,36 +245,36 @@ defmodule Two do
   @doc """
   Create new business customer.
   """
-  @spec create_new_business_customer(Tesla.Env.client(), String.t()) ::
+  @spec create_new_business_customer(Tesla.Env.client(), String.t(), String.t()) ::
           {:ok, Types.business_customer()} | {:error, Tesla.Env.t()}
-  def create_new_business_customer(client, merchant_id) do
+  def create_new_business_customer(client, merchant_id, customer) do
     client
     |> with_retry_middleware()
-    |> Tesla.post("/merchant/:mid/customer", opts: [path_params: [mid: merchant_id]])
+    |> Tesla.post("/merchant/:mid/customer", customer, opts: [path_params: [mid: merchant_id]])
     |> evaluate_response()
   end
 
   @doc """
   Update business customer.
   """
-  @spec update_business_customer(Tesla.Env.client(), String.t(), String.t()) ::
+  @spec update_business_customer(Tesla.Env.client(), String.t(), String.t(), String.t()) ::
           {:ok, Types.merchant_redirect_urls()} | {:error, Tesla.Env.t()}
-  def update_business_customer(client, merchant_id, customer_id) do
+  def update_business_customer(client, merchant_id, customer_id, customer) do
     client
     |> with_retry_middleware()
-    |> Tesla.put("/merchant/:mid/customer/:cid", opts: [path_params: [mid: merchant_id, cid: customer_id]])
+    |> Tesla.put("/merchant/:mid/customer/:cid", customer, opts: [path_params: [mid: merchant_id, cid: customer_id]])
     |> evaluate_response()
   end
 
   @doc """
   Create new business user.
   """
-  @spec create_new_business_user(Tesla.Env.client(), String.t(), String.t()) ::
+  @spec create_new_business_user(Tesla.Env.client(), String.t(), String.t(), String.t()) ::
           {:ok, Types.business_user()} | {:error, Tesla.Env.t()}
-  def create_new_business_user(client, merchant_id, customer_id) do
+  def create_new_business_user(client, merchant_id, customer_id, user) do
     client
     |> with_retry_middleware()
-    |> Tesla.post("/merchant/:mid/customer/{cid}/user", opts: [path_params: [mid: merchant_id, cid: customer_id]])
+    |> Tesla.post("/merchant/:mid/customer/{cid}/user", user, opts: [path_params: [mid: merchant_id, cid: customer_id]])
     |> evaluate_response()
   end
 
