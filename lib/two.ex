@@ -300,6 +300,21 @@ defmodule Two do
   end
 
   @doc """
+  Lookup business user.
+  """
+  @spec lookup_business_user(Tesla.Env.client(), String.t(), String.t(), String.t()) ::
+          {:ok, Types.business_user()} | {:error, Tesla.Env.t()}
+  def lookup_business_user(client, merchant_id, customer_id, our_user_id) do
+    client
+    |> with_retry_middleware()
+    |> with_follow_redirect_middleware()
+    |> Tesla.get("/merchant/:mid/customer/:cid/user_lookup/:ext_uid",
+      opts: [path_params: [mid: merchant_id, cid: customer_id, ext_uid: our_user_id]]
+    )
+    |> evaluate_response()
+  end
+
+  @doc """
   Fetch all users for a business.
   """
   @spec fetch_business_users(Tesla.Env.client(), String.t(), String.t()) ::
