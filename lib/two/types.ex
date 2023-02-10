@@ -216,12 +216,10 @@ defmodule Two.Types do
   @type business_customer :: %{
           :country_prefix => String.t(),
           :email_domain => String.t(),
-          optional(:id) => String.t(),
           optional(:insights_webhook) => String.t(),
           :legal_name => String.t(),
           :merchant_customer_id => String.t(),
           :merchant_redirect_urls => merchant_redirect_urls(),
-          :missing_customer_data_url => String.t(),
           optional(:official_address) => address(),
           :organization_id => String.t(),
           optional(:shipping_addresses) => [address()],
@@ -229,6 +227,8 @@ defmodule Two.Types do
           optional(:webhooks) => webhook_urls(),
           optional(:website) => String.t(),
           # server-populated fields
+          optional(:id) => String.t(),
+          :missing_customer_data_url => String.t(),
           :approved_for_credit => boolean()
         }
 
@@ -241,4 +241,20 @@ defmodule Two.Types do
           optional(:onboarding_completed_url) => String.t(),
           optional(:onboarding_failed_url) => String.t()
         }
+
+  @type business_user :: %{
+          :email => String.t(),
+          :first_name => String.t(),
+          :last_name => String.t(),
+          :merchant_user_id => String.t(),
+          optional(:phone) => String.t(),
+          # server-populated fields
+          :customer_id => String.t(),
+          :id => String.t(),
+          :is_legal_rep => boolean(),
+          :user_enrollment_url => String.t(),
+          :verified_fields => [String.t()]
+        }
+
+  @type business_users :: [business_user()]
 end
