@@ -267,6 +267,20 @@ defmodule Two do
   end
 
   @doc """
+  Lookup business customer.
+  """
+  @spec lookup_business_customer(Tesla.Env.client(), String.t(), String.t()) ::
+          {:ok, Types.business_customer()} | {:error, Tesla.Env.t()}
+  def lookup_business_customer(client, merchant_id, our_customer_id) do
+    client
+    |> with_retry_middleware()
+    |> Tesla.get("/merchant/:mid/customer_lookup/:ext_cid",
+      opts: [path_params: [mid: merchant_id, ext_cid: our_customer_id]]
+    )
+    |> evaluate_response()
+  end
+
+  @doc """
   Create new business user.
   """
   @spec create_new_business_user(Tesla.Env.client(), String.t(), String.t(), String.t()) ::
