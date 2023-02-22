@@ -130,10 +130,10 @@ defmodule Two do
   Get a previously created order.
   """
   @spec get_order_intent(Tesla.Env.client(), String.t()) :: {:ok, Types.order_intent()} | {:error, Tesla.Env.t()}
-  def get_order_intent(client, order_id) do
+  def get_order_intent(client, order_intent_id) do
     client
     |> with_retry_middleware()
-    |> Tesla.get("/orders/:id", opts: [path_params: [id: order_id]])
+    |> Tesla.get("/order_intent/:id", opts: [path_params: [id: order_intent_id]])
     |> evaluate_response()
   end
 
