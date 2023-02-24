@@ -126,6 +126,7 @@ defmodule Two.Types do
           optional(:merchant_additional_info) => String.t(),
           optional(:invoice_details) => invoice_details(),
           optional(:merchant_id) => String.t(),
+          optional(:merchant_user_id) => String.t(),
           optional(:merchant_urls) => merchant_urls(),
           optional(:shipping_details) => shipping_details(),
           optional(:original_order_id) => String.t(),
