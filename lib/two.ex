@@ -10,20 +10,6 @@ defmodule Two do
   @test_base_url "https://sandbox.api.two.inc/v1"
   @production_base_url "https://api.two.inc/v1"
 
-  @retry_options [
-    delay: 500,
-    max_retries: 3,
-    should_retry: fn
-      # retry 503
-      {:ok, %{status: 503}} -> true
-      # don't retry timeouts
-      {:error, "timeout"} -> false
-      # retry other connection errors
-      {:error, _} -> true
-      _ -> false
-    end
-  ]
-
   defp base_url(:test), do: @test_base_url
   defp base_url(:production), do: @production_base_url
 
@@ -79,7 +65,22 @@ defmodule Two do
 
   @spec with_retry_middleware(Tesla.Client.t()) :: Tesla.Client.t()
   defp with_retry_middleware(client) do
-    retry_middleware = {Tesla.Middleware.Retry, @retry_options}
+    retry_middleware =
+      {Tesla.Middleware.Retry,
+       [
+         delay: 500,
+         max_retries: 3,
+         should_retry: fn
+           # retry 503
+           {:ok, %{status: 503}} -> true
+           # don't retry timeouts
+           {:error, "timeout"} -> false
+           # retry other connection errors
+           {:error, _} -> true
+           _ -> false
+         end
+       ]}
+
     Tesla.client([retry_middleware | Tesla.Client.middleware(client)], Tesla.Client.adapter(client))
   end
 
