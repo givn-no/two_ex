@@ -204,12 +204,12 @@ defmodule Two.Types do
         }
 
   @type company_address :: %{
-    city: String.t(),
-    postalCode: String.t(),
-    streetAddress: String.t()
-  }
+          city: String.t(),
+          postalCode: String.t(),
+          streetAddress: String.t()
+        }
 
   @type company_address_response :: %{
-    address: company_address()
-  }
+          address: company_address()
+        }
 end
