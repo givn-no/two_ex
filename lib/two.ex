@@ -230,10 +230,6 @@ defmodule Two do
     |> with_retry_middleware()
     |> Tesla.post("/order/:id/fulfillments", "", query: query, opts: [path_params: [id: order_id]])
     |> evaluate_response()
-    |> case do
-         {:ok, _} -> {:ok, :order_fulfilled}
-         other -> other
-       end
   end
 
   @doc """
