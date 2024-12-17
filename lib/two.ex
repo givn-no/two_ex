@@ -215,28 +215,6 @@ defmodule Two do
 
   @doc """
   Set order state `FULFILLED`.
-  """
-  @deprecated "Use fulfill_order/3 instead."
-  @spec set_fulfilled(Tesla.Env.client(), String.t(), keyword()) :: {:ok, :order_fulfilled} | {:error, Tesla.Env.t()}
-  def set_fulfilled(client, order_id, opts \\ []) do
-    query =
-      case Enum.into(opts, %{}) do
-        %{lang: lang} -> [lang: lang]
-        _ -> []
-      end
-
-    client
-    |> with_retry_middleware()
-    |> Tesla.post("/order/:id/fulfilled", "", query: query, opts: [path_params: [id: order_id]])
-    |> evaluate_response()
-    |> case do
-      {:ok, _} -> {:ok, :order_fulfilled}
-      other -> other
-    end
-  end
-
-  @doc """
-  Set order state `FULFILLED`.
 
   The endpoint supports partial fulfillment, but it is not implemented here (for now).
   """
