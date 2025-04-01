@@ -4,11 +4,12 @@ defmodule Two.MixProject do
   def project do
     [
       app: :two_ex,
-      version: "0.0.1",
+      version: "0.0.2",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
+      hex: hex(),
       deps: deps(),
       name: "Two Client",
       source_url: "https://github.com/hooplab/two_ex"
@@ -35,9 +36,16 @@ defmodule Two.MixProject do
 
   defp package() do
     [
-      name: "nets_easy",
+      name: "two_ex",
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/hooplab/nets-easy-elixir"}
+      links: %{"GitHub" => "https://github.com/givn-no/two_ex"}
+    ]
+  end
+
+  defp hex do
+    [
+      api_url: System.get_env("HEX_API_URL"),
+      api_key: System.get_env("HEX_API_KEY")
     ]
   end
 end
