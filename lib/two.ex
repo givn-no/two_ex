@@ -7,7 +7,7 @@ defmodule Two do
 
   @default_adapter Tesla.Adapter.Httpc
 
-  @test_base_url "https://sandbox.api.two.inc/v1"
+  @test_base_url "https://api.sandbox.two.inc/v1"
   @production_base_url "https://api.two.inc/v1"
 
   defp base_url(:test), do: @test_base_url
