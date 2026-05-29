@@ -4,7 +4,7 @@ defmodule Two.MixProject do
   def project do
     [
       app: :two_ex,
-      version: "0.0.2",
+      version: "0.0.3",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -12,7 +12,7 @@ defmodule Two.MixProject do
       hex: hex(),
       deps: deps(),
       name: "Two Client",
-      source_url: "https://github.com/hooplab/two_ex"
+      source_url: "https://github.com/givn-no/two_ex"
     ]
   end
 
